@@ -29,6 +29,4 @@ describe('Ship factory', () => {
         }
         expect(ship1.hits).toBe(4);
     })
-
-    // test('')
 });
