@@ -21,20 +21,31 @@ class Gameboard {
 		//   console.log(this.board);
 	}
 
-	placeShip(startCoordinates = [0, 0], direction = 'x') {
-		const myShip = new Ship(2, 0, false);
+	placeShip(startCoordinates = [0, 0], direction = 'x', shipLength) {
+		const myShip = new Ship(shipLength);
 		// const shipStartCoordinates = startCoordinates;
-		const shipDirection = direction;
-		if (
-			this.isStartCoordinatesAvailable(startCoordinates) &&
-			this.isEnoughSpace()
-		) {
+		if (this.isEnoughSpace(startCoordinates, direction, myShip.length)) {
+			let x = startCoordinates[0];
+			let y = startCoordinates[1];
+			for (let i = 0; i < myShip.length; i++) {
+				if (direction === 'x') {
+					this.board[x][y].ship = true;
+					x++;
+				} else if (direction === 'y') {
+					this.board[x][y].ship = true;
+					y++;
+				}
+			}
+			return 'Ship placed';
+		} else {
+			return 'Cannot build here'
 		}
 	}
 	//checkCoordinates
-	isStartCoordinatesAvailable(startCoordinates = [0, 0]) {
+	checkCoordinates(startCoordinates = [0, 0]) {
 		const x = startCoordinates[0];
 		const y = startCoordinates[1];
+		if (x >= 10 || y >= 10) return false;
 		if (this.board[x][y].ship === false) return true;
 	}
 	//checkCoordinatesWithLengthAndDirection
@@ -43,20 +54,20 @@ class Gameboard {
 		let y = startCoordinates[1];
 		for (let i = 0; i < shipLength; i++) {
 			if (direction === 'x') {
-				if (this.isStartCoordinatesAvailable([x, y])) {
+				if (this.checkCoordinates([x, y])) {
 					x++;
 				} else {
 					return false;
 				}
 			} else if (direction === 'y') {
-				if (this.isStartCoordinatesAvailable([x, y])) {
+				if (this.checkCoordinates([x, y])) {
 					y++;
 				} else {
-                    return false
-                }
+					return false;
+				}
 			}
 		}
-        return true
+		return true;
 	}
 }
 

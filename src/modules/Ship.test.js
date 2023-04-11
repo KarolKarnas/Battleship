@@ -23,10 +23,10 @@ describe('Ship factory', () => {
         ship1.hit()
         expect(ship1.hits).toBe(1)
     })
-    test('will ship sunk = true when num hits = length', () => {
+    test('will ship sunk == true when num hits == length', () => {
         for(let i = 0; i < ship1.length; i++) {
             ship1.hit();
         }
-        expect(ship1.hits).toBe(4);
+        expect(ship1.sunk).toBeTruthy();
     })
 });
