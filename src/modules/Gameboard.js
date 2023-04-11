@@ -3,7 +3,9 @@ import Ship from './Ship';
 class Gameboard {
 	constructor() {
 		this.board = [];
+		this.shipTracker = [];
 		this.makeBoard(this.board);
+		this.idTracker = 0;
 	}
 
 	makeBoard(board) {
@@ -12,17 +14,20 @@ class Gameboard {
 			for (let i = 0; i < 10; i++) {
 				board[j][i] = {
 					ship: false,
-					hit: false,
+					shipId: false,
+					missedShot: false,
+					hitShip: false,
 					coordinatesArr: [j, i],
 					coordinates: { x: j, y: i },
 				};
 			}
 		}
-		//   console.log(this.board);
 	}
 
 	placeShip(startCoordinates = [0, 0], direction = 'x', shipLength) {
-		const myShip = new Ship(shipLength);
+		const myShip = new Ship(shipLength, this.idTracker);
+		this.shipTracker.push(myShip);
+		this.idTracker++;
 		// const shipStartCoordinates = startCoordinates;
 		if (this.isEnoughSpace(startCoordinates, direction, myShip.length)) {
 			let x = startCoordinates[0];
@@ -30,6 +35,7 @@ class Gameboard {
 			for (let i = 0; i < myShip.length; i++) {
 				if (direction === 'x') {
 					this.board[x][y].ship = true;
+					this.board[x][y].shipId = myShip.id;
 					x++;
 				} else if (direction === 'y') {
 					this.board[x][y].ship = true;
@@ -38,17 +44,19 @@ class Gameboard {
 			}
 			return 'Ship placed';
 		} else {
-			return 'Cannot build here'
+			return 'Cannot build here';
 		}
 	}
-	//checkCoordinates
-	checkCoordinates(startCoordinates = [0, 0]) {
-		const x = startCoordinates[0];
-		const y = startCoordinates[1];
+
+	checkCoordinates(coordinates = [0, 0]) {
+		const x = coordinates[0];
+		const y = coordinates[1];
 		if (x >= 10 || y >= 10) return false;
-		if (this.board[x][y].ship === false) return true;
+		if (this.board[x][y].ship === false) {
+			return true;
+		}
 	}
-	//checkCoordinatesWithLengthAndDirection
+
 	isEnoughSpace(startCoordinates = [0, 0], direction = 'x', shipLength = 2) {
 		let x = startCoordinates[0];
 		let y = startCoordinates[1];
@@ -69,10 +77,26 @@ class Gameboard {
 		}
 		return true;
 	}
+
+	receiveAttack(attackCoordinates = [0, 0]) {
+		let x = attackCoordinates[0];
+		let y = attackCoordinates[1];
+		if (this.board[x][y].ship === true && this.board[x][y].hitShip === false) {
+			const id = this.board[x][y].shipId;
+			(this.board[x][y].hitShip = true), this.shipTracker[id].hit();
+		} else {
+			this.board[x][y].missedShot = true;
+		}
+	}
+
+	areAllShipsSunk() {
+		for (let i = 0; i < this.shipTracker.length; i++) {
+			if (this.shipTracker[i].sunk === false) {
+				return false;
+			}
+		}
+		return true
+	}
 }
-
-// const board = new Gameboard;
-
-// console.log(board);
 
 export default Gameboard;
