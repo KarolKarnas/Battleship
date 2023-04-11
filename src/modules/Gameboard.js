@@ -87,6 +87,7 @@ class Gameboard {
 		} else {
 			this.board[x][y].missedShot = true;
 		}
+		// return attackCoordinates
 	}
 
 	areAllShipsSunk() {
