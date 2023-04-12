@@ -1,9 +1,9 @@
-import Gameboard from './factories/Gameboard';
-import Player from './factories/Player';
-import Ship from './factories/Ship';
+import Game from './Game';
 
 class Ui {
-	constructor() {}
+	constructor() {
+        this.game = new Game()
+    }
 }
 
 export default Ui;
