@@ -54,13 +54,14 @@ h1, h3 {
     flex-direction: column;
     align-items: center;
     border: 1px solid var(--grey-lighter);
-    height: 90%;
-    width: 40%;
+    /* height: 90%; */
+    padding: 5rem;
+    /* width: 40%; */
 }
 
-#player-gameboard {
+#player-gameboard, #ai-gameboard {
     margin-top: 0.5rem;
-    border: 1px solid var(--grey-lighter);
+    border: 1px solid var(--grey-light);
     /* height: 90%;
     width: 90%; */
     display: grid;
@@ -68,12 +69,14 @@ h1, h3 {
 	grid-template-rows: repeat(10, 1fr);
     /* gap: 0.2rem; */
     
+    
 }
 
 .field {
-    outline: #38426f solid 1px;
-	height: 50px;
-    width: 50px;
+    /* outline: 1px solid black; */
+    border: 1px solid var(--grey-light);
+	height: 3rem;
+    width: 3rem;
 	background-color: var(--grey-lighter);
     display: flex;
     justify-content: center;
@@ -84,12 +87,15 @@ h1, h3 {
     color: var(--dark-blue-two);
 }
 
-.field.ship {
+.ship {
     background-color: var(--light-blue);
+    /* outline: #a6babd93 solid 3px; */
+    border: 2px solid var(--dark-blue-two);
 }
 
 .field:hover {
     background-color: var(--red);
+    cursor: pointer;
 }
 
 
