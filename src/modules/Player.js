@@ -2,23 +2,24 @@ import Gameboard from './Gameboard';
 
 class Player {
 	constructor() {
-		this.aiShots = []
+		this.aiShots = [];
 	}
-	attack(gameboard) {
-		const coordinates = [0, 0];
-		gameboard.receiveAttack([coordinates]);
+	attack(gameboard, coordinates = [0, 0]) {
+		gameboard.receiveAttack(coordinates);
 	}
+
 	checkShot(coordinates) {
 		const currentX = coordinates[0];
 		const currentY = coordinates[1];
 
-		for (let i = 0; i < this.aiShots; i++) {
+		for (let i = 0; i < this.aiShots.length; i++) {
 			const previousX = this.aiShots[i][0];
 			const previousY = this.aiShots[i][1];
-			if (currentX === previousX && currentY === previousY) {
+			if (previousX === currentX && previousY === currentY) {
 				return false;
 			}
 		}
+		
 		return true;
 	}
 
@@ -35,7 +36,7 @@ class Player {
 			this.aiShots.push(coordinates);
 			gameboard.receiveAttack(coordinates);
 		} else {
-			this.attack();
+			this.randomAttack();
 		}
 		return coordinates;
 	}
