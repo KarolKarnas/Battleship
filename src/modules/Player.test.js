@@ -1,19 +1,19 @@
 import Gameboard from './Gameboard';
-import { Player, CPU } from './Player';
+import { Player } from './Player';
 
 let player = new Player();
-let cpu = new CPU();
+let ai = new Player();
 let gameboardPlayer = new Gameboard();
-let gameboardCPU = new Gameboard();
+let gameboardAi = new Gameboard();
 
-describe(`CPU player`, () => {
+describe(`Ai player`, () => {
 	// beforeEach(() => {
 	// });
 
-	test(`CPU attacks random coordinates between <0,9> inclusive`, () => {
+	test(`Ai attacks random coordinates between <0,9> inclusive`, () => {
 		const arr = [];
 		for (let i = 0; i < 100; i++) {
-			const coordinates = cpu.getRandomCoordinates();
+			const coordinates = ai.getRandomCoordinates();
 			arr.push(coordinates);
 			const x = coordinates[0];
 			const y = coordinates[1];
@@ -22,5 +22,5 @@ describe(`CPU player`, () => {
 		console.log(arr);
 	});
 
-	// test('CPU will not attack same coordinates', () => {});
+	// test('Ai will not attack same coordinates', () => {});
 });
