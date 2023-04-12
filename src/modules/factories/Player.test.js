@@ -1,5 +1,5 @@
 import Gameboard from './Gameboard';
-import { Player } from './Player';
+import Player from './Player';
 
 let player = new Player();
 let ai = new Player();

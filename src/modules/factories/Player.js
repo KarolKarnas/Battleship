@@ -1,5 +1,3 @@
-import Gameboard from './Gameboard';
-
 class Player {
 	constructor() {
 		this.aiShots = [];
@@ -42,4 +40,4 @@ class Player {
 	}
 }
 
-export { Player };
+export default Player;
