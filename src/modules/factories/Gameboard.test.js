@@ -42,14 +42,14 @@ describe('Gameboard', () => {
 		expect(gameboad1.placeShip([6, 0], 'x', 5)).toBe('Cannot build here');
 	});
 
-	test(`After placing ship, board pools with ship should have object property ship === true`, () => {
+	test(`After placing ship, board fields with ship should have object property ship === true`, () => {
 		gameboad1.placeShip([0, 0], 'x', 5);
 		for (let i = 0; i < 5; i++) {
 			expect(gameboad1.board[i][0].ship === true).toBeTruthy();
 		}
 	});
 
-	describe('Ship id ship hit ship tracker, hit empty pool', () => {
+	describe('Ship id ship hit ship tracker, hit empty field', () => {
 		beforeEach(() => {
 			gameboad1 = new Gameboard();
 			gameboad1.placeShip([0, 0], 'x', 5);
@@ -58,12 +58,12 @@ describe('Gameboard', () => {
 			expect(gameboad1.shipTracker.length).toBe(1);
 		});
 
-		test(`board pool without a ship after receiveAttack([8,8]) have missedShot prop == true`, () => {
+		test(`board field without a ship after receiveAttack([8,8]) have missedShot prop == true`, () => {
 			gameboad1.receiveAttack([8, 8]);
 			expect(gameboad1.board[8][8].missedShot).toBe(true);
 		});
 
-		test(`board pool with a ship after receiveAttack([0,0]) have hitShip prop == true`, () => {
+		test(`board field with a ship after receiveAttack([0,0]) have hitShip prop == true`, () => {
 			gameboad1.receiveAttack([0, 0]);
 			expect(gameboad1.board[0][0].hitShip).toBe(true);
 		});

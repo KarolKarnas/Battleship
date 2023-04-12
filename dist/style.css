@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+
+:root {
+	--blue: #0f7a9e;
+	--blue-two: #3298a7;
+	--light-blue: #66ffff;
+	--dark-blue: #38426f;
+	--dark-blue-two: #004879;
+	--red: #f34937;
+	--light-red: #f2703c;
+	--yellow: #38426f;
+	--grey-lighter: #e2e8f0;
+	--grey-light: #6e7070;
+	--dark-grey: #5c5e5e;
+	--white: #f9faf8;
+}
+
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+	font-family: 'Roboto Condensed', Courier, monospace;
+	font-weight: 300;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--blue-two);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+h1, h3 {
+    color: var(--grey-lighter);
+}
+
+.game {
+    border: 1px solid var(--grey-lighter);
+    height: 90vh;
+    width: 90vw;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.player1-container, .player2-container  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid var(--grey-lighter);
+    height: 90%;
+    width: 40%;
+}
+
+#player-gameboard {
+    margin-top: 0.5rem;
+    border: 1px solid var(--grey-lighter);
+    /* height: 90%;
+    width: 90%; */
+    display: grid;
+	grid-template-columns: repeat(10, 1fr);
+	grid-template-rows: repeat(10, 1fr);
+    /* gap: 0.2rem; */
+    
+}
+
+.field {
+    outline: #38426f solid 1px;
+	height: 50px;
+    width: 50px;
+	background-color: var(--grey-lighter);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    text-transform: uppercase;
+    font-weight: 300;
+    color: var(--dark-blue-two);
+}
+
+.field.ship {
+    background-color: var(--light-blue);
+}
+
+.field:hover {
+    background-color: var(--red);
+}
+
+
+

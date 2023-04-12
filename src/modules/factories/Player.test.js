@@ -24,7 +24,7 @@ describe(`Ai player`, () => {
 		console.log(arr);
 	});
 
-	test(`board pool attacked by ai should have missedShot pro == true`, () => {
+	test(`board field attacked by ai should have missedShot pro == true`, () => {
 		const coordinates = ai.randomAttack(gameboardPlayer)
 		console.log(coordinates);
 		const x = coordinates[0]
@@ -41,7 +41,7 @@ describe(`Ai player`, () => {
 });
 
 describe('Human Player', () => {
-	test(`board pool attacked by player should have missedShot pro == true`, () => {
+	test(`board field attacked by player should have missedShot pro == true`, () => {
 		player.attack(gameboardAi, [1,1])
 		expect(gameboardAi.board[1][1].missedShot).toBe(true)
 	})

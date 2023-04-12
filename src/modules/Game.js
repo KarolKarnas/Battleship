@@ -1,6 +1,7 @@
 import Gameboard from './factories/Gameboard';
 import Player from './factories/Player';
 import Ship from './factories/Ship';
+import Ui from './Ui';
 
 class Game {
 	constructor() {
@@ -10,6 +11,7 @@ class Game {
 		this.ai = new Player();
 
         this.gameboardPlayer.placeShip([0,0], 'x', 1)
+        this.gameboardPlayer.placeShip([6,9], 'x', 4)
 	}
 
 	playerTurn() {

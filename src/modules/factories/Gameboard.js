@@ -19,6 +19,7 @@ class Gameboard {
 					hitShip: false,
 					coordinatesArr: [j, i],
 					coordinates: { x: j, y: i },
+					coordinatesStr: `[${j},${i}]`,
 				};
 			}
 		}
