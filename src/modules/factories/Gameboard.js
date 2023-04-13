@@ -40,6 +40,7 @@ class Gameboard {
 					x++;
 				} else if (direction === 'y') {
 					this.board[x][y].ship = true;
+					this.board[x][y].shipId = myShip.id;
 					y++;
 				}
 			}
@@ -84,7 +85,8 @@ class Gameboard {
 		let y = attackCoordinates[1];
 		if (this.board[x][y].ship === true && this.board[x][y].hitShip === false) {
 			const id = this.board[x][y].shipId;
-			(this.board[x][y].hitShip = true), this.shipTracker[id].hit();
+			this.board[x][y].hitShip = true;
+			this.shipTracker[id].hit();
 		} else {
 			this.board[x][y].missedShot = true;
 		}
@@ -97,7 +99,7 @@ class Gameboard {
 				return false;
 			}
 		}
-		return true
+		return true;
 	}
 }
 

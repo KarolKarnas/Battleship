@@ -9,8 +9,8 @@
 	--red: #f34937;
 	--light-red: #f2703c;
 	--yellow: #38426f;
-	--grey-lighter: #e2e8f0;
-	--grey-light: #6e7070;
+	--grey-lighter: #eff2f5;
+	--grey-light: #b6b8b8;
 	--dark-grey: #5c5e5e;
 	--white: #f9faf8;
 }
@@ -34,6 +34,7 @@ body {
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
+    overflow: hidden;
 }
 
 h1, h3 {
