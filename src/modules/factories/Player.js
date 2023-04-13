@@ -6,18 +6,13 @@ class Player {
 		gameboard.receiveAttack(coordinates);
 	}
 
-	checkShot(coordinates) {
-		const currentX = coordinates[0];
-		const currentY = coordinates[1];
+	checkShot(coordinates, gameboard) {
+		const x = coordinates[0];
+		const y = coordinates[1];
 
-		for (let i = 0; i < this.aiShots.length; i++) {
-			const previousX = this.aiShots[i][0];
-			const previousY = this.aiShots[i][1];
-			if (previousX === currentX && previousY === currentY) {
-				return false;
-			}
+		if (gameboard.board[x][y].missedShot || gameboard.board[x][y].hitShip) {
+			return false;
 		}
-		
 		return true;
 	}
 
@@ -30,11 +25,12 @@ class Player {
 
 	randomAttack(gameboard) {
 		const coordinates = this.getRandomCoordinates();
-		if (this.checkShot(coordinates)) {
+		console.log(gameboard);
+		if (this.checkShot(coordinates, gameboard)) {
 			this.aiShots.push(coordinates);
 			gameboard.receiveAttack(coordinates);
 		} else {
-			this.randomAttack();
+			this.randomAttack(gameboard);
 		}
 		return coordinates;
 	}

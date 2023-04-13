@@ -28,6 +28,7 @@ class Game {
     this.ai = new _factories_Player__WEBPACK_IMPORTED_MODULE_1__["default"]();
     this.placeShipsPlayer();
     this.placeShipsAi();
+    this.playerTurn();
   }
   placeShipsPlayer() {
     this.gameboardPlayer.placeShip([0, 0], 'x', 1);
@@ -53,21 +54,23 @@ class Game {
     this.gameboardAi.placeShip([3, 4], 'x', 3);
     this.gameboardAi.placeShip([4, 9], 'x', 4);
   }
-  playerTurn() {
-    this.player.attack(gameboardAi, [1, 1]);
+  async playerTurn() {
+    this.player.attack(this.gameboardAi, [1, 1]);
     if (this.gameboardAi.areAllShipsSunk()) {
-      this.gameOver();
+      console.log('game over');
+      return;
     }
-    this.aiTurn();
+    console.log('aiAttack');
+    await this.aiTurn();
   }
-  aiTurn() {
+  async aiTurn() {
     this.ai.randomAttack(this.gameboardPlayer);
     if (this.gameboardPlayer.areAllShipsSunk()) {
-      this.gameOver();
+      console.log('game over');
+      return;
     }
-    this.playerTurn();
+    await this.playerTurn();
   }
-  gameOver() {}
 
   // gameStart() {
 
@@ -298,15 +301,11 @@ class Player {
     let coordinates = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [0, 0];
     gameboard.receiveAttack(coordinates);
   }
-  checkShot(coordinates) {
-    const currentX = coordinates[0];
-    const currentY = coordinates[1];
-    for (let i = 0; i < this.aiShots.length; i++) {
-      const previousX = this.aiShots[i][0];
-      const previousY = this.aiShots[i][1];
-      if (previousX === currentX && previousY === currentY) {
-        return false;
-      }
+  checkShot(coordinates, gameboard) {
+    const x = coordinates[0];
+    const y = coordinates[1];
+    if (gameboard.board[x][y].missedShot || gameboard.board[x][y].hitShip) {
+      return false;
     }
     return true;
   }
@@ -318,11 +317,12 @@ class Player {
   }
   randomAttack(gameboard) {
     const coordinates = this.getRandomCoordinates();
-    if (this.checkShot(coordinates)) {
+    console.log(gameboard);
+    if (this.checkShot(coordinates, gameboard)) {
       this.aiShots.push(coordinates);
       gameboard.receiveAttack(coordinates);
     } else {
-      this.randomAttack();
+      this.randomAttack(gameboard);
     }
     return coordinates;
   }
