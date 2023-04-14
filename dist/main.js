@@ -2,10 +2,10 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/modules/Game.js":
-/*!*****************************!*\
-  !*** ./src/modules/Game.js ***!
-  \*****************************/
+/***/ "./src/modules/App.js":
+/*!****************************!*\
+  !*** ./src/modules/App.js ***!
+  \****************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -14,21 +14,89 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _factories_Gameboard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./factories/Gameboard */ "./src/modules/factories/Gameboard.js");
 /* harmony import */ var _factories_Player__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./factories/Player */ "./src/modules/factories/Player.js");
-/* harmony import */ var _factories_Ship__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./factories/Ship */ "./src/modules/factories/Ship.js");
-/* harmony import */ var _Ui__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Ui */ "./src/modules/Ui.js");
 
 
-
-
-class Game {
+class App {
   constructor() {
+    //Instantiate Gameboard and Players
     this.gameboardPlayer = new _factories_Gameboard__WEBPACK_IMPORTED_MODULE_0__["default"]();
     this.gameboardAi = new _factories_Gameboard__WEBPACK_IMPORTED_MODULE_0__["default"]();
     this.player = new _factories_Player__WEBPACK_IMPORTED_MODULE_1__["default"]();
     this.ai = new _factories_Player__WEBPACK_IMPORTED_MODULE_1__["default"]();
+    //Ship Placement
     this.placeShipsPlayer();
     this.placeShipsAi();
-    this.playerTurn();
+
+    // GameLoop
+    this.currentPlayer = 'human';
+
+    //Render
+    this.aiGameboardElement = document.getElementById('ai-gameboard');
+    this.playerGameboardElement = document.getElementById('player-gameboard');
+    this.renderAiGameboard();
+    this.renderPlayerGameboard();
+    this.addListeners();
+  }
+  playerTurn(e) {
+    if (e.target.classList.contains('field') && this.currentPlayer === 'human') {
+      const coordinates = JSON.parse(e.target.dataset.coordinates);
+      console.log(`player hit [${coordinates}]`);
+      this.player.attack(this.gameboardAi, coordinates);
+      this.cleanGameBoard(this.aiGameboardElement);
+      this.renderAiGameboard();
+      if (this.gameboardAi.areAllShipsSunk()) {
+        console.log('game over Player won');
+        return;
+      }
+      this.currentPlayer = 'ai';
+      this.aiTurn();
+    }
+  }
+  aiTurn() {
+    if (this.currentPlayer === 'ai') {
+      this.ai.randomAttack(this.gameboardPlayer);
+      if (this.gameboardPlayer.areAllShipsSunk()) {
+        console.log('game over Ai won');
+        return;
+      }
+      this.cleanGameBoard(this.playerGameboardElement);
+      this.renderPlayerGameboard();
+      this.currentPlayer = 'human';
+    }
+  }
+  cleanGameBoard(gameboard) {
+    while (gameboard.firstChild) {
+      gameboard.removeChild(gameboard.firstChild);
+    }
+  }
+  addListeners() {
+    this.aiGameboardElement.addEventListener('click', this.playerTurn.bind(this));
+  }
+  renderPlayerGameboard() {
+    this.renderGameboard(this.gameboardPlayer.board, this.playerGameboardElement);
+  }
+  renderAiGameboard() {
+    this.renderGameboard(this.gameboardAi.board, this.aiGameboardElement);
+  }
+  renderGameboard(gameboard, gameboardElement) {
+    for (let i = 0; i < 10; i++) {
+      for (let j = 0; j < 10; j++) {
+        const divField = document.createElement('div');
+        divField.classList.add('field');
+        divField.textContent = gameboard[j][i].coordinatesStr;
+        divField.setAttribute('data-coordinates', `[${j}, ${i}]`);
+        if (gameboard[j][i].ship) {
+          divField.classList.add('ship');
+        }
+        if (gameboard[j][i].missedShot) {
+          divField.textContent = '*';
+        }
+        if (gameboard[j][i].hitShip) {
+          divField.textContent = 'X';
+        }
+        gameboardElement.appendChild(divField);
+      }
+    }
   }
   placeShipsPlayer() {
     this.gameboardPlayer.placeShip([0, 0], 'x', 1);
@@ -54,108 +122,8 @@ class Game {
     this.gameboardAi.placeShip([3, 4], 'x', 3);
     this.gameboardAi.placeShip([4, 9], 'x', 4);
   }
-  async playerTurn() {
-    this.player.attack(this.gameboardAi, [1, 1]);
-    if (this.gameboardAi.areAllShipsSunk()) {
-      console.log('game over');
-      return;
-    }
-    console.log('aiAttack');
-    await this.aiTurn();
-  }
-  async aiTurn() {
-    this.ai.randomAttack(this.gameboardPlayer);
-    if (this.gameboardPlayer.areAllShipsSunk()) {
-      console.log('game over');
-      return;
-    }
-    await this.playerTurn();
-  }
-
-  // gameStart() {
-
-  // }
 }
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Game);
-
-/***/ }),
-
-/***/ "./src/modules/Ui.js":
-/*!***************************!*\
-  !*** ./src/modules/Ui.js ***!
-  \***************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-class Ui {
-  constructor(game) {
-    this.aiGameboardElement = document.getElementById('ai-gameboard');
-    this.playerGameboardElement = document.getElementById('player-gameboard');
-    this.game = game;
-    this.renderAiGameboard();
-    this.renderPlayerGameboard();
-    this.addListeners();
-  }
-  addListeners() {
-    this.aiGameboardElement.addEventListener('click', this.hitAiGameboard.bind(this));
-    this.playerGameboardElement.addEventListener('click', this.hitPlayerGameboard.bind(this));
-  }
-  hitPlayerGameboard(e) {
-    if (e.target.classList.contains('field')) {
-      console.log(e.target);
-      const coordinates = JSON.parse(e.target.dataset.coordinates);
-      this.game.gameboardPlayer.receiveAttack(coordinates);
-      while (this.playerGameboardElement.firstChild) {
-        this.playerGameboardElement.removeChild(this.playerGameboardElement.firstChild);
-      }
-      this.renderPlayerGameboard();
-    }
-  }
-  hitAiGameboard(e) {
-    if (e.target.classList.contains('field')) {
-      console.log(e.target);
-      const coordinates = JSON.parse(e.target.dataset.coordinates);
-      this.game.gameboardAi.receiveAttack(coordinates);
-      while (this.aiGameboardElement.firstChild) {
-        this.aiGameboardElement.removeChild(this.aiGameboardElement.firstChild);
-      }
-      this.renderAiGameboard();
-    }
-  }
-  renderPlayerGameboard() {
-    this.renderGameboard(this.game.gameboardPlayer.board, this.playerGameboardElement);
-  }
-  renderAiGameboard() {
-    this.renderGameboard(this.game.gameboardAi.board, this.aiGameboardElement);
-  }
-  renderGameboard(gameboard, gameboardElement) {
-    // console.log(gameboard);
-
-    for (let i = 0; i < 10; i++) {
-      for (let j = 0; j < 10; j++) {
-        const divField = document.createElement('div');
-        divField.classList.add('field');
-        divField.textContent = gameboard[j][i].coordinatesStr;
-        divField.setAttribute('data-coordinates', `[${j}, ${i}]`);
-        if (gameboard[j][i].ship) {
-          divField.classList.add('ship');
-        }
-        if (gameboard[j][i].missedShot) {
-          divField.textContent = '*';
-        }
-        if (gameboard[j][i].hitShip) {
-          divField.textContent = 'X';
-        }
-        gameboardElement.appendChild(divField);
-      }
-    }
-  }
-}
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Ui);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (App);
 
 /***/ }),
 
@@ -294,9 +262,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 class Player {
-  constructor() {
-    this.aiShots = [];
-  }
+  constructor() {}
   attack(gameboard) {
     let coordinates = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [0, 0];
     gameboard.receiveAttack(coordinates);
@@ -317,9 +283,8 @@ class Player {
   }
   randomAttack(gameboard) {
     const coordinates = this.getRandomCoordinates();
-    console.log(gameboard);
+    console.log(`Ai hit [${coordinates}]`);
     if (this.checkShot(coordinates, gameboard)) {
-      this.aiShots.push(coordinates);
       gameboard.receiveAttack(coordinates);
     } else {
       this.randomAttack(gameboard);
@@ -433,12 +398,9 @@ var __webpack_exports__ = {};
   !*** ./src/index.js ***!
   \**********************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _modules_Ui__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/Ui */ "./src/modules/Ui.js");
-/* harmony import */ var _modules_Game__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/Game */ "./src/modules/Game.js");
+/* harmony import */ var _modules_App__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/App */ "./src/modules/App.js");
 
-
-const game = new _modules_Game__WEBPACK_IMPORTED_MODULE_1__["default"]();
-const ui = new _modules_Ui__WEBPACK_IMPORTED_MODULE_0__["default"](game);
+const app = new _modules_App__WEBPACK_IMPORTED_MODULE_0__["default"]();
 })();
 
 /******/ })()

@@ -1,6 +1,5 @@
 class Player {
 	constructor() {
-		this.aiShots = [];
 	}
 	attack(gameboard, coordinates = [0, 0]) {
 		gameboard.receiveAttack(coordinates);
@@ -25,9 +24,8 @@ class Player {
 
 	randomAttack(gameboard) {
 		const coordinates = this.getRandomCoordinates();
-		console.log(gameboard);
+		console.log(`Ai hit [${coordinates}]`);
 		if (this.checkShot(coordinates, gameboard)) {
-			this.aiShots.push(coordinates);
 			gameboard.receiveAttack(coordinates);
 		} else {
 			this.randomAttack(gameboard);

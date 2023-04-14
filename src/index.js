@@ -1,5 +1,3 @@
-import Ui from './modules/Ui';
-import Game from './modules/Game';
+import App from './modules/App';
 
-const game = new Game()
-const ui = new Ui(game);
+const app = new App();

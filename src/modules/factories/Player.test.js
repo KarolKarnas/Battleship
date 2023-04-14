@@ -21,10 +21,10 @@ describe(`Ai player`, () => {
 			const y = coordinates[1];
 			expect(x >= 0 && x <= 9 && y >= 0 && y <= 9).toBe(true);
 		}
-		console.log(arr);
+		// console.log(arr);
 	});
 
-	test(`board field attacked by ai should have missedShot pro == true`, () => {
+	test(`board field attacked by ai should have missedShot prop == true`, () => {
 		const coordinates = ai.randomAttack(gameboardPlayer)
 		console.log(coordinates);
 		const x = coordinates[0]
@@ -32,10 +32,10 @@ describe(`Ai player`, () => {
 		expect(gameboardPlayer.board[x][y].missedShot).toBe(true)
 	})
 
-	test(`checkShot with coordinates which are already in aiShots array should return false`, () => {
-		ai.aiShots.push([0,0])
-		expect(ai.checkShot([0,0])).toBe(false)
-	})
+	// test(`checkShot with coordinates which are already in aiShots array should return false`, () => {
+	// 	ai.aiShots.push([0,0])
+	// 	expect(ai.checkShot([0,0])).toBe(false)
+	// })
 
 	// test('Ai will not attack same coordinates', () => {});
 });
